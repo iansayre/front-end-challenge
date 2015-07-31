@@ -29,24 +29,30 @@ var domObj = function() {
             prod.title        = product.name;
             prod.tagline      = product.tagline;
             prod.url          = product.url;
-            prod.custom_class = 'col-' + ( ( i % 3) +1 );
+            prod.custom_class = 'col-' + ( ( i % 3) + 1 );
 
-        return( self.updateDom(prod) );
+        self.updateDom(prod);
     };
 
     self.updateHtml = function(product, i) {
         console.log('update it brah!');
         var row = document.getElementsByClassName('row')[i % 3];
         console.log('found dat row');
-       $(row).load('product-template.html');
+        var prod_template = self.getHtmlTemplate();
+        row.innerHTML = prod_template;
     };
 
-    /*self.getHtmlTemplate = function() {
-        var template = '<!--#include file="product-template.html"-->';
-        return(template);
-    };*/
-};
+    self.getHtmlTemplate = function() {
 
+        var prod_container = document.getElementsByClassName('product-container')[0];
+            prod_container.classList +=  ' ' + product.custom_class;
+            prod_container.dataset.link.href = product.url;
+            prod_container.dataset.image.src = product.photo;
+            prod_container.dataset.title =     product.title;
+            prod_container.dataset.tagline =   product.tagline;
+        return(template);
+    };
+};
 
 
 
@@ -109,7 +115,7 @@ function productobj(product, i){
   self.updatehtml = function(){
     var template = 'product-template.html';
     console.log('TEMPLATE!!! : ' + template);
-    $.get(template, function(){
+    $('.row').load(template, function(){
       self.htmlview = template.replace('{image}', self.photo).replace('{title}', self.title).replace('{tagline}', self.tagline).replace('{url}', self.url).replace('{custom_class}', self.custom_class);
       console.dir('&*&*&*! ' + self.htmlview);
     });
