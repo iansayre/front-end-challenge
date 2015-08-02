@@ -5,7 +5,7 @@ var domObj = function() {
     self.getProducts = function(url) {
         $.getJSON( url, function(response) {
             for( i = 0; i < response.sales.length; i++ ){
-                self.products.push( new self.productObj( response.sales[i], i) );
+                self.products.push( new self.productObj( response.sales[i]) );
             }
         });
     };
@@ -15,7 +15,7 @@ var domObj = function() {
             divRow = '<div class="row"></div>';
 
         for ( var i = 0; i < self.products.length; i++ ) {
-            console.log('appenedin some thigns');
+            console.log('appenedin some things');
             if ( i % 3 === 0 ) {
                 contentNode.innerHTML = divRow;
             }
@@ -36,22 +36,33 @@ var domObj = function() {
 
     self.updateHtml = function(product, i) {
         console.log('update it brah!');
-        var row = document.getElementsByClassName('row')[i % 3];
+        var row = document.getElementsByClassName('row')[i];
         console.log('found dat row');
-        var prod_template = self.getHtmlTemplate();
-        row.innerHTML = prod_template;
-    };
-
-    self.getHtmlTemplate = function() {
-
-        var prod_container = document.getElementsByClassName('product-container')[0];
+        // var prod_template = self.getHtmlTemplate();
+        $(row).load('product-template.html', function(){
+            var prod_container = document.getElementsByClassName('product-container')[i];
+            console.log(prod_container);
             prod_container.classList +=  ' ' + product.custom_class;
             prod_container.dataset.link.href = product.url;
             prod_container.dataset.image.src = product.photo;
             prod_container.dataset.title =     product.title;
             prod_container.dataset.tagline =   product.tagline;
-        return(template);
+        });
     };
+
+    /*self.getHtmlTemplate = function(product, i) {
+        // var template = '<!--#include file="product-template.html"-->';
+        console.log('PRODUCT:: ' + product);
+        console.log(i);
+        var prod_container = document.getElementsByClassName('product-container')[i];
+            console.log(prod_container);
+            prod_container.classList +=  ' ' + product.custom_class;
+            prod_container.dataset.link.href = product.url;
+            prod_container.dataset.image.src = product.photo;
+            prod_container.dataset.title =     product.title;
+            prod_container.dataset.tagline =   product.tagline;
+        return(prod_container);
+    };*/
 };
 
 
